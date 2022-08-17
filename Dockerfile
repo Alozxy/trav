@@ -9,7 +9,7 @@ RUN go build -o trav
 FROM debian:11
 
 COPY --from=build /building/client/trav /usr/bin/trav
-COPY --from=build /building/entrypoint.sh /entrypoint.sh
+COPY --from=build /building/docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 RUN apt update && apt install -y iptables
