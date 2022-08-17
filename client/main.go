@@ -23,7 +23,7 @@ func main() {
 	var redir_port_64 uint64
 	var interval int
 	var enable_ipv6 bool
-	
+
 	flag.StringVar(&stun_server, "s", "stun.mixvoip.com:3478", "stun server address in [addr:port] format, must support stun over tcp.")
 	flag.Uint64Var(&local_port_64, "l", 12345, "local port")
 	flag.Uint64Var(&redir_port_64, "r", 14885, "redir port")
@@ -42,9 +42,12 @@ func main() {
 	server_port_64, err := strconv.ParseUint(strings.Split(stun_server, ":")[1], 10, 16)
 	server_port := uint16(server_port_64)
 
+	clear_rule_v4()
+	clear_rule_v6()
+	log.Println("creating firewall rules...")
 	set_rule_v4(local_port, redir_port)
 	if enable_ipv6 {
-		log.Println("ipv6 firewall rule enabled")
+		log.Println("ipv6 firewall rules is enabled")
 		set_rule_v6()
 	}
 
