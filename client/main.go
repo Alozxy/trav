@@ -4,8 +4,11 @@ import (
 	"flag"
 	"log"
 	"net"
+	"os"
+	"os/signal"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -17,6 +20,19 @@ func syn_loop(local_port uint16, server_ip string, server_port uint16) {
 }
 
 func main() {
+
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		for s := range c {
+			switch s {
+			case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
+				clear_rule_v4()
+				clear_rule_v6()
+				log.Fatalln(s)
+			}
+		}
+	}()
 
 	var stun_server string
 	var local_port_64 uint64
