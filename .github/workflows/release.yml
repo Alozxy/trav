@@ -28,3 +28,4 @@ jobs:
         goversion: "https://go.dev/dl/go1.19.linux-amd64.tar.gz"
         project_path: "./client"
         binary_name: "trav"
+        asset_name: trav-${{ matrix.goos }}-${{ matrix.goarch }}
