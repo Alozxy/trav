@@ -57,7 +57,7 @@ func stun_dial(d *net.Dialer, local_port uint16, external_port *uint16, server_i
 			log.Println("stun: external port:", xorAddr.Port, "no change")
 			return
 		} else {
-			log.Println("stun: external port:", xorAddr.Port, "updating file...")
+			log.Println("stun: external port:", xorAddr.Port, ", updating file...")
 			err = os.WriteFile("/tmp/external.port", []byte(strconv.Itoa(xorAddr.Port)), 0777)
 			if err != nil {
 				log.Println(err)
