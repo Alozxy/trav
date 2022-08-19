@@ -24,7 +24,11 @@ func local_ip(server_addr string) net.IP {
 	return local_addr.IP
 }
 
-func send_syn(local_port uint16, server_ip string, server_port uint16) {
+func send_syn() {
+
+	local_port := get_conf("local_port").(uint16)
+	server_ip := get_conf("server_ip").(string)
+	server_port := get_conf("server_port").(uint16)
 
 	src_ip := local_ip(server_ip + ":" + strconv.Itoa(int(server_port)))
 	dst_ip := net.ParseIP("1.0.0.1").To4()

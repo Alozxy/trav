@@ -10,7 +10,9 @@ import (
 	"github.com/pion/stun"
 )
 
-func request(local_port uint16, external_port *uint16, server_ip string, server_port uint16, redir_port uint16, enable_ipv6 bool) {
+func request(external_port *uint16) {
+
+	local_port := get_conf("local_port").(uint16)
 
 	lAddr := &net.TCPAddr{
 		Port: int(local_port),
@@ -20,13 +22,18 @@ func request(local_port uint16, external_port *uint16, server_ip string, server_
 		LocalAddr: lAddr,
 	}
 
-	stun_dial(d, local_port, external_port, server_ip, server_port, redir_port, enable_ipv6)
+	stun_dial(d, external_port)
 }
 
-func stun_dial(d *net.Dialer, local_port uint16, external_port *uint16, server_ip string, server_port uint16, redir_port uint16, enable_ipv6 bool) {
+func stun_dial(d *net.Dialer, external_port *uint16) {
+
+	server_ip := get_conf("server_ip").(string)
+	server_port := get_conf("server_port").(uint16)
+	redir_port := get_conf("redir_port").(uint16)
+	enable_ipv6 := get_conf("enable_ipv6").(bool)
+	output := get_conf("output").(string)
 
 	log.Println("connecting to stun server...")
-
 	conn, err := d.Dial("tcp4", server_ip+":"+strconv.FormatUint(uint64(server_port), 10))
 	if err != nil {
 		log.Println(err)
@@ -53,15 +60,15 @@ func stun_dial(d *net.Dialer, local_port uint16, external_port *uint16, server_i
 			}
 			return
 		}
+
 		if int(*external_port) == xorAddr.Port {
 			log.Println("stun: external port:", xorAddr.Port, "no change")
 			return
 		} else {
 			log.Println("stun: external port:", xorAddr.Port, ", updating file...")
-			err = os.WriteFile("/tmp/external.port", []byte(strconv.Itoa(xorAddr.Port)), 0777)
+			err = os.WriteFile(output, []byte(strconv.Itoa(xorAddr.Port)), 0644)
 			if err != nil {
-				log.Println(err)
-				return
+				log.Fatalln(err)
 			}
 
 			if enable_ipv6 {

@@ -20,7 +20,10 @@ func clear_rule_v6() {
 	}
 }
 
-func set_rule_v4(local_port uint16, redir_port uint16) {
+func set_rule_v4() {
+
+	local_port := get_conf("local_port").(uint16)
+	redir_port := get_conf("redir_port").(uint16)
 
 	if out, err := exec.Command("bash", "-c", `iptables-restore --noflush <<-EOF
 		*nat
