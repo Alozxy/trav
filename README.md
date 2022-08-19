@@ -17,7 +17,7 @@ go build -o trav
 Currently only supports Linux system, and need iptables to create redirect rules.
 
 ```
-trav -i 1500 -l 12345 -r 14885 -s stun.mixvoip.com:3478
+trav -i 1500 -l 12345 -r 14885 -s stun.mixvoip.com:3478 -o /tmp/external.port
 ```
 
 Then you can find the port exposed on the public network in /tmp/external.port. When someone connect to this port of nat firewall, the traffic will be redirected to port 14885. The file will be updated with next stun request when the nat mapping changes.
@@ -31,7 +31,9 @@ Usage of trav:
   -i int                                                                                  
         interval between two stun request in second (default 120)                         
   -l uint                                                                                 
-        local port (default 12345)                                                        
+        local port (default 12345)  
+  -o string
+        Write output to <file-path> (default "./external.port")
   -r uint                                                                                 
         redir port (default 14885)                                                        
   -s string                                                                               
