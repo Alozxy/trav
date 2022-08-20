@@ -71,9 +71,15 @@ func stun_dial(d *net.Dialer, external_port *uint16) {
 				log.Fatalln(err)
 			}
 
-			if enable_ipv6 {
-				log.Println("updating ipv6 firewall rules...")
-				modify_rule_v6(uint16(xorAddr.Port), redir_port)
+			if get_conf("enable_redirect").(bool) {
+
+				if enable_ipv6 {
+					log.Println("updating ipv6 firewall rules...")
+					modify_rule_v6(uint16(xorAddr.Port), redir_port)
+				}
+			} else {
+
+				log.Println("port forwarding disabled, skipping...")
 			}
 
 			*external_port = uint16(xorAddr.Port)

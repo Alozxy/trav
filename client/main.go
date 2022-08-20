@@ -31,12 +31,14 @@ func main() {
 	var redir_port_64 uint64
 	var interval int
 	var enable_ipv6 bool
+	var enable_redirect bool
 	var output string
 	flag.StringVar(&stun_server, "s", "stun.mixvoip.com:3478", "stun server address in [addr:port] format, must support stun over tcp.")
 	flag.Uint64Var(&local_port_64, "l", 12345, "local port")
 	flag.Uint64Var(&redir_port_64, "r", 14885, "redir port")
 	flag.IntVar(&interval, "i", 120, "interval between two stun request in second")
 	flag.BoolVar(&enable_ipv6, "6", false, "whether to enable ipv6 forwarding. Note that the forwarding port for ipv6 is the external port rather than local port, and will be modified when nat mapping change")
+	flag.BoolVar(&enable_redirect, "D", true, "whether to enable iptables or netsh's port forwarding")
 	flag.StringVar(&output, "o", "./external.port", "Write output to <file-path>")
 	flag.Parse()
 	var local_port uint16 = uint16(local_port_64)
@@ -57,17 +59,25 @@ func main() {
 	set_conf("redir_port", redir_port)
 	set_conf("interval", interval)
 	set_conf("enable_ipv6", enable_ipv6)
+	set_conf("enable_redirect", enable_redirect)
 	set_conf("output", output)
 	set_conf("server_ip", server_ip)
 	set_conf("server_port", server_port)
 
-	clear_rule_v4()
-	clear_rule_v6()
-	log.Println("creating firewall rules...")
-	set_rule_v4()
-	if get_conf("enable_ipv6").(bool) {
-		log.Println("ipv6 firewall rules is enabled")
-		set_rule_v6()
+	if get_conf("enable_redirect").(bool) {
+
+		clear_rule_v4()
+		clear_rule_v6()
+		log.Println("creating firewall rules...")
+		set_rule_v4()
+		if get_conf("enable_ipv6").(bool) {
+
+			log.Println("ipv6 firewall rules is enabled")
+			set_rule_v6()
+		}
+	} else {
+
+		log.Println("port forwarding disabled, skipping...")
 	}
 
 	start()
