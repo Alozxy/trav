@@ -9,16 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
-	"time"
 )
-
-func syn_loop() {
-
-	for {
-		send_syn()
-		time.Sleep(1 * time.Second)
-	}
-}
 
 func main() {
 
@@ -79,13 +70,19 @@ func main() {
 		set_rule_v6()
 	}
 
-	go syn_loop()
+	start()
 
-	var external_port uint16 = 0
-	for {
+}
 
-		request(&external_port)
-		time.Sleep(time.Duration(get_conf("interval").(int)) * time.Second)
+func local_ip(server_addr string) net.IP {
+
+	conn, err := net.Dial("udp4", server_addr)
+	if err != nil {
+		log.Println("failed to get local ip")
+		log.Fatalln(err)
 	}
+	defer conn.Close()
 
+	local_addr := conn.LocalAddr().(*net.UDPAddr)
+	return local_addr.IP
 }

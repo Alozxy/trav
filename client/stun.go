@@ -18,7 +18,7 @@ func request(external_port *uint16) {
 		Port: int(local_port),
 	}
 	d := &net.Dialer{
-		Timeout:   5 * time.Second,
+		Timeout:   3 * time.Second,
 		LocalAddr: lAddr,
 	}
 

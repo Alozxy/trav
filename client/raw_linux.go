@@ -11,17 +11,12 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
-func local_ip(server_addr string) net.IP {
+func syn_loop() {
 
-	conn, err := net.Dial("udp4", server_addr)
-	if err != nil {
-		log.Println("failed to get local ip")
-		log.Fatalln(err)
+	for {
+		send_syn()
+		time.Sleep(1 * time.Second)
 	}
-	defer conn.Close()
-
-	local_addr := conn.LocalAddr().(*net.UDPAddr)
-	return local_addr.IP
 }
 
 func send_syn() {
