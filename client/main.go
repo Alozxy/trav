@@ -13,19 +13,6 @@ import (
 
 func main() {
 
-	c := make(chan os.Signal)
-	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-	go func() {
-		for s := range c {
-			switch s {
-			case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
-				clear_rule_v4()
-				clear_rule_v6()
-				log.Fatalln(s)
-			}
-		}
-	}()
-
 	var stun_server string
 	var local_port_64 uint64
 	var redir_port_64 uint64
@@ -38,7 +25,7 @@ func main() {
 	flag.Uint64Var(&redir_port_64, "r", 14885, "redir port")
 	flag.IntVar(&interval, "i", 120, "interval between two stun request in second")
 	flag.BoolVar(&enable_ipv6, "6", false, "enable ipv6 forwarding. Note that the forwarding port for ipv6 is the external port rather than local port, and will be modified when nat mapping change")
-	flag.BoolVar(&enable_redirect, "D", true, "disable iptables or netsh's port forwarding")
+	flag.BoolVar(&enable_redirect, "D", false, "disable iptables or netsh's port forwarding")
 	flag.StringVar(&output, "o", "./external.port", "Write output to <file-path>")
 	flag.Parse()
 	var local_port uint16 = uint16(local_port_64)
@@ -64,7 +51,22 @@ func main() {
 	set_conf("server_ip", server_ip)
 	set_conf("server_port", server_port)
 
-	if get_conf("enable_redirect").(bool) {
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		for s := range c {
+			switch s {
+			case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
+				if !get_conf("enable_redirect").(bool) {
+					clear_rule_v4()
+					clear_rule_v6()
+				}
+				log.Fatalln(s)
+			}
+		}
+	}()
+
+	if !get_conf("enable_redirect").(bool) {
 
 		clear_rule_v4()
 		clear_rule_v6()

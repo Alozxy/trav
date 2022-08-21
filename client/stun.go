@@ -71,7 +71,7 @@ func stun_dial(d *net.Dialer, external_port *uint16) {
 				log.Fatalln(err)
 			}
 
-			if get_conf("enable_redirect").(bool) {
+			if !get_conf("enable_redirect").(bool) {
 
 				if enable_ipv6 {
 					log.Println("updating ipv6 firewall rules...")
