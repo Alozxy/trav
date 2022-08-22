@@ -33,7 +33,7 @@ Usage of trav:
   -D
       disable iptables or netsh's port forwarding      
   -i int                                                                                  
-      interval between two stun request in second (default 120)                         
+      interval between two stun request in second (default 300)                         
   -l uint                                                                                 
       local port (default 12345)  
   -o string

@@ -23,7 +23,7 @@ func main() {
 	flag.StringVar(&stun_server, "s", "stun.mixvoip.com:3478", "stun server address in [addr:port] format, must support stun over tcp.")
 	flag.Uint64Var(&local_port_64, "l", 12345, "local port")
 	flag.Uint64Var(&redir_port_64, "r", 14885, "redir port")
-	flag.IntVar(&interval, "i", 120, "interval between two stun request in second")
+	flag.IntVar(&interval, "i", 300, "interval between two stun request in second")
 	flag.BoolVar(&enable_ipv6, "6", false, "enable ipv6 forwarding. Note that the forwarding port for ipv6 is the external port rather than local port, and will be modified when nat mapping change")
 	flag.BoolVar(&enable_redirect, "D", false, "disable iptables or netsh's port forwarding")
 	flag.StringVar(&output, "o", "./external.port", "Write output to <file-path>")
