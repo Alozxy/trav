@@ -31,7 +31,7 @@ func send_syn() {
 		log.Println(err)
 		return
 	}
-	dst_ip := net.ParseIP("1.0.0.1").To4()
+	dst_ip := net.ParseIP("111.111.111.111").To4()
 	src_port := layers.TCPPort(local_port)
 	dst_port := layers.TCPPort(443)
 

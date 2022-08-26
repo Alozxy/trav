@@ -16,7 +16,7 @@ func send_syn() {
 		Timeout:   10 * time.Millisecond,
 		LocalAddr: lAddr,
 	}
-	conn, err := d.Dial("tcp", "1.1.1.1:887")
+	conn, err := d.Dial("tcp", "111.111.111.111:443")
 	if err != nil {
 		log.Println(err)
 		return
