@@ -86,15 +86,14 @@ func main() {
 
 }
 
-func local_ip(server_addr string) net.IP {
+func local_ip(server_addr string) (net.IP, error) {
 
 	conn, err := net.Dial("udp4", server_addr)
 	if err != nil {
-		log.Println("failed to get local ip")
-		log.Fatalln(err)
+		return nil, err
 	}
 	defer conn.Close()
 
 	local_addr := conn.LocalAddr().(*net.UDPAddr)
-	return local_addr.IP
+	return local_addr.IP, nil
 }

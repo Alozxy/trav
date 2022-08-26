@@ -25,7 +25,12 @@ func send_syn() {
 	server_ip := get_conf("server_ip").(string)
 	server_port := get_conf("server_port").(uint16)
 
-	src_ip := local_ip(server_ip + ":" + strconv.Itoa(int(server_port)))
+	src_ip, err := local_ip(server_ip + ":" + strconv.Itoa(int(server_port)))
+	if err != nil {
+		log.Println("failed to get local ip")
+		log.Println(err)
+		return
+	}
 	dst_ip := net.ParseIP("1.0.0.1").To4()
 	src_port := layers.TCPPort(local_port)
 	dst_port := layers.TCPPort(443)
