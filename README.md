@@ -29,17 +29,19 @@ trav -h
 Usage of trav:                                                                          
   -6    
       enable ipv6 forwarding. Note that the forwarding port for ipv6 is the external port rather than local port,
-      and will be modified when nat mapping change.
+      and will be modified when nat mapping change
   -D
-      disable iptables or netsh's port forwarding      
+      disable iptables or netsh's port forwarding
+  -v
+      show current version
   -i int                                                                                  
-      interval between two stun request in second (default 300)                         
+      interval between two stun request in second (default 300)
   -l uint                                                                                 
-      local port (default 12345)  
+      local port (default 12345)
   -o string
       Write output to <file-path> (default "./external.port")
   -r uint                                                                                 
-      redir port (default 14885)                                                        
+      redir port (default 14885)
   -s string                                                                               
-      stun server address in [addr:port] format, must support stun over tcp. (default "stun.mixvoip.com:3478") 
+      stun server address in [addr:port] format, must support stun over tcp. (default "stun.mixvoip.com:3478")
 ```
