@@ -3,7 +3,13 @@ package main
 import "time"
 
 func start() {
-	go syn_loop()
+	if conf.get_conf("udp_mode").(bool) {
+
+		go udp_loop()
+	} else {
+
+		go syn_loop()
+	}
 
 	var external_port uint16 = 0
 	for {

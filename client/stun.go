@@ -13,34 +13,57 @@ import (
 func request(external_port *uint16) {
 
 	local_port := get_conf("local_port").(uint16)
-
-	lAddr := &net.TCPAddr{
-		Port: int(local_port),
-	}
-	d := &net.Dialer{
-		Timeout:   3 * time.Second,
-		LocalAddr: lAddr,
-	}
-
-	stun_dial(d, external_port)
-}
-
-func stun_dial(d *net.Dialer, external_port *uint16) {
-
 	server_ip := get_conf("server_ip").(string)
 	server_port := get_conf("server_port").(uint16)
+
+	if conf.get_conf("udp_mode").(bool) {
+
+		lAddr := &net.UDPAddr{
+			Port: int(local_port),
+		}
+		d := &net.Dialer{
+			Timeout:   3 * time.Second,
+			LocalAddr: lAddr,
+		}
+
+		log.Println("connecting to stun server...")
+		conn, err := d.Dial("udp4", server_ip+":"+strconv.FormatUint(uint64(server_port), 10))
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		stun_dial(&conn, external_port)
+
+	} else {
+
+		lAddr := &net.TCPAddr{
+			Port: int(local_port),
+		}
+		d := &net.Dialer{
+			Timeout:   3 * time.Second,
+			LocalAddr: lAddr,
+		}
+
+		log.Println("connecting to stun server...")
+		conn, err := d.Dial("tcp4", server_ip+":"+strconv.FormatUint(uint64(server_port), 10))
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		stun_dial(&conn, external_port)
+	}
+
+}
+
+func stun_dial(conn *net.Conn, external_port *uint16) {
+
 	redir_port := get_conf("redir_port").(uint16)
 	enable_ipv6 := get_conf("enable_ipv6").(bool)
 	output := get_conf("output").(string)
 
-	log.Println("connecting to stun server...")
-	conn, err := d.Dial("tcp4", server_ip+":"+strconv.FormatUint(uint64(server_port), 10))
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	c, err := stun.NewClient(conn)
+	c, err := stun.NewClient(*conn)
 	if err != nil {
 		log.Println(err)
 		return
@@ -62,10 +85,10 @@ func stun_dial(d *net.Dialer, external_port *uint16) {
 		}
 
 		if int(*external_port) == xorAddr.Port {
-			log.Println("stun: external port:", xorAddr.Port, "no change")
+			log.Println("stun: external address and port:", xorAddr.IP, xorAddr.Port, "no change")
 			return
 		} else {
-			log.Println("stun: external port:", xorAddr.Port, ", updating file...")
+			log.Println("stun: external address and port:", xorAddr.IP, xorAddr.Port, ", updating file...")
 			err = os.WriteFile(output, []byte(strconv.Itoa(xorAddr.Port)), 0644)
 			if err != nil {
 				log.Fatalln(err)

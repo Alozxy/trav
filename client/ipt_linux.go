@@ -29,6 +29,7 @@ func set_rule_v4() {
 		*nat
 		:TRAVERSAL -
 		-A TRAVERSAL -p tcp -m tcp --dport `+strconv.FormatUint(uint64(local_port), 10)+` -j REDIRECT --to-ports `+strconv.FormatUint(uint64(redir_port), 10)+`
+		-A TRAVERSAL -p udp -m udp --dport `+strconv.FormatUint(uint64(local_port), 10)+` -j REDIRECT --to-ports `+strconv.FormatUint(uint64(redir_port), 10)+`
 		-A PREROUTING -m addrtype --dst-type LOCAL -j TRAVERSAL	
 		COMMIT
 		EOF`).CombinedOutput(); err != nil {
