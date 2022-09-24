@@ -8,7 +8,7 @@ import (
 	"github.com/alozxy/udp-forward"
 )
 
-var forwarder *Forwarder
+var forwarder *forward.Forwarder
 
 func clear_rule_v4() {
 
