@@ -4,7 +4,11 @@ import (
 	"log"
 	"os/exec"
 	"strconv"
+
+	"github.com/alozxy/udp-forward"
 )
+
+var forwarder *Forwarder
 
 func clear_rule_v4() {
 
@@ -12,6 +16,7 @@ func clear_rule_v4() {
 		log.Fatalln("netsh return a non-zero value while clearing ipv4 rules:", string(out))
 	}
 
+	forwarder.Close()
 }
 
 func clear_rule_v6() {
@@ -35,6 +40,10 @@ func set_rule_v4() {
 		log.Fatalln("netsh return a non-zero value while setting ipv4 rules:", string(out))
 	}
 
+	forwarder, err = forward.Forward("0.0.0.0:"+strconv.FormatUint(uint64(local_port), 10), "127.0.0.1:"+strconv.FormatUint(uint64(redir_port), 10), forward.DefaultTimeout)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func set_rule_v6() {

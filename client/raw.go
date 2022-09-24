@@ -11,15 +11,7 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
-func syn_loop() {
-
-	for {
-		send_syn()
-		time.Sleep(1 * time.Second)
-	}
-}
-
-func send_syn() {
+func send_udp() {
 
 	local_port := get_conf("local_port").(uint16)
 	server_ip := get_conf("server_ip").(string)
@@ -32,37 +24,35 @@ func send_syn() {
 		return
 	}
 	dst_ip := net.ParseIP("111.111.111.111").To4()
-	src_port := layers.TCPPort(local_port)
-	dst_port := layers.TCPPort(513)
+	src_port := layers.UDPPort(local_port)
+	dst_port := layers.UDPPort(513)
 
 	ip_header := &layers.IPv4{
 		SrcIP:    src_ip,
 		DstIP:    dst_ip,
 		Version:  4,
 		TTL:      64,
-		Protocol: layers.IPProtocolTCP,
+		Protocol: layers.IPProtocolUDP,
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	tcp_header := &layers.TCP{
+	udp_header := &layers.UDP{
 		SrcPort: src_port,
 		DstPort: dst_port,
-		Seq:     rand.Uint32(),
-		SYN:     true,
-		Window:  65535,
 	}
-	tcp_header.SetNetworkLayerForChecksum(ip_header)
+	udp_header.SetNetworkLayerForChecksum(ip_header)
 
+	payload := gopacket.Payload("SYN")
 	buf := gopacket.NewSerializeBuffer()
 	opts := gopacket.SerializeOptions{
 		ComputeChecksums: true,
 		FixLengths:       true,
 	}
-	if err := gopacket.SerializeLayers(buf, opts, tcp_header); err != nil {
+	if err := gopacket.SerializeLayers(buf, opts, udp_header, payload); err != nil {
 		log.Fatal(err)
 	}
 
-	conn, err := net.ListenPacket("ip4:tcp", "0.0.0.0")
+	conn, err := net.ListenPacket("ip4:udp", "0.0.0.0")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -70,15 +60,7 @@ func send_syn() {
 	if _, err := conn.WriteTo(buf.Bytes(), &net.IPAddr{IP: dst_ip}); err != nil {
 		log.Fatalln(err)
 	}
-	log.Println("send syn packet to " + dst_ip.String() + ":" + strconv.FormatUint(uint64(dst_port), 10))
+	log.Println("send udp packet to " + dst_ip.String() + ":" + strconv.FormatUint(uint64(dst_port), 10))
 
 	conn.Close()
-}
-
-func udp_loop() {
-
-	for {
-		send_udp()
-		time.Sleep(1 * time.Second)
-	}
 }
