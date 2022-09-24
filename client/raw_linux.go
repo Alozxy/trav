@@ -33,7 +33,7 @@ func send_syn() {
 	}
 	dst_ip := net.ParseIP("111.111.111.111").To4()
 	src_port := layers.TCPPort(local_port)
-	dst_port := layers.TCPPort(443)
+	dst_port := layers.TCPPort(513)
 
 	ip_header := &layers.IPv4{
 		SrcIP:    src_ip,
