@@ -5,27 +5,27 @@ import "time"
 func start() {
 
 	var external_port uint16 = 0
-	for {
+	if conf.get_conf("udp_mode").(bool) {
 
-		if conf.get_conf("udp_mode").(bool) {
+		go send_udp()
+		for {
 
-			send_udp()
-		} else {
-
-			send_syn()
+			request(&external_port)
+			time.Sleep(time.Duration(get_conf("interval").(int)) * time.Second)
 		}
 
-		request(&external_port)
+	} else {
 
-		for i := 0; i < get_conf("interval").(int); i++ {
-			if conf.get_conf("udp_mode").(bool) {
+		for {
 
-				send_udp()
-			} else {
+			send_syn()
+			request(&external_port)
+
+			for i := 0; i < get_conf("interval").(int); i++ {
 
 				send_syn()
+				time.Sleep(time.Duration(get_conf("interval").(int)) * time.Second)
 			}
-			time.Sleep(1 * time.Second)
 		}
 	}
 }
