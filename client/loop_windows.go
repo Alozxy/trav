@@ -7,7 +7,7 @@ func start() {
 	var external_port uint16 = 0
 	if conf.get_conf("udp_mode").(bool) {
 
-		go send_udp()
+		go udp_loop()
 		for {
 
 			request(&external_port)

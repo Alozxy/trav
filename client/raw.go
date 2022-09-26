@@ -64,3 +64,11 @@ func send_udp() {
 
 	conn.Close()
 }
+
+func udp_loop() {
+
+	for {
+		send_udp()
+		time.Sleep(1 * time.Second)
+	}
+}
