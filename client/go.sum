@@ -1,5 +1,5 @@
-github.com/alozxy/udp-forward v0.0.0-20220924084014-ce7debda77ed h1:nWjfAghZxtMpSWD1bMUTJm6YuKGRUlb21YvV00yDg6Q=
-github.com/alozxy/udp-forward v0.0.0-20220924084014-ce7debda77ed/go.mod h1:K+Dr7F5V1Zg3jLdcauEPXtEHkPqvlCB/ESw429RWq+k=
+github.com/alozxy/udp-forward v0.0.0-20220924094254-abe700dd65a8 h1:MT6yItv2dyXg+iFPgb7RYu6N1EmKtn7UGMAtMszOG8w=
+github.com/alozxy/udp-forward v0.0.0-20220924094254-abe700dd65a8/go.mod h1:K+Dr7F5V1Zg3jLdcauEPXtEHkPqvlCB/ESw429RWq+k=
 github.com/google/gopacket v1.1.19 h1:ves8RnFZPGiFnTS0uPQStjwru6uO6h+nlr9j6fL7kF8=
 github.com/google/gopacket v1.1.19/go.mod h1:iJ8V8n6KS+z2U1A8pUwu8bW5SyEMkXJB8Yo/Vo+TKTo=
 github.com/pion/stun v0.3.5 h1:uLUCBCkQby4S1cf6CGuR9QrVOKcvUwFeemaC865QHDg=
