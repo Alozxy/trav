@@ -8,7 +8,7 @@ import (
 	"github.com/alozxy/udp-forward"
 )
 
-var forwarder *forward.Forwarder
+var forwarder *forward.Forwarder = nil
 
 func clear_rule_v4() {
 
@@ -16,7 +16,9 @@ func clear_rule_v4() {
 		log.Fatalln("netsh return a non-zero value while clearing ipv4 rules:", string(out))
 	}
 
-	forwarder.Close()
+	if forwarder != nil {
+		forwarder.Close()
+	}
 }
 
 func clear_rule_v6() {
