@@ -13,7 +13,7 @@ func send_syn() {
 		Port: int(local_port),
 	}
 	d := net.Dialer{
-		Timeout:   10 * time.Millisecond,
+		Timeout:   1 * time.Millisecond,
 		LocalAddr: lAddr,
 	}
 	conn, err := d.Dial("tcp", "111.111.111.111:513")

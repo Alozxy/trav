@@ -24,7 +24,7 @@ func start() {
 			for i := 0; i < get_conf("interval").(int); i++ {
 
 				send_syn()
-				time.Sleep(time.Duration(get_conf("interval").(int)) * time.Second)
+				time.Sleep(1 * time.Second)
 			}
 		}
 	}
