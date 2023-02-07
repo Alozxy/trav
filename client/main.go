@@ -67,8 +67,8 @@ func main() {
 			switch s {
 			case syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT:
 				if !get_conf("enable_redirect").(bool) {
-					clear_rule_v4()
-					clear_rule_v6()
+					clean_rule_v4()
+					clean_rule_v6()
 				}
 				log.Fatalln(s)
 			}
@@ -77,8 +77,8 @@ func main() {
 
 	if !get_conf("enable_redirect").(bool) {
 
-		clear_rule_v4()
-		clear_rule_v6()
+		clean_rule_v4()
+		clean_rule_v6()
 		log.Println("creating firewall rules...")
 		set_rule_v4()
 		if get_conf("enable_ipv6").(bool) {

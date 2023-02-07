@@ -10,10 +10,10 @@ import (
 
 var forwarder *forward.Forwarder = nil
 
-func clear_rule_v4() {
+func clean_rule_v4() {
 
 	if out, err := exec.Command("netsh", "interface", "portproxy", "reset").CombinedOutput(); err != nil {
-		log.Fatalln("netsh return a non-zero value while clearing ipv4 rules:", string(out))
+		log.Fatalln("netsh return a non-zero value while cleaning ipv4 rules:", string(out))
 	}
 
 	if forwarder != nil {
@@ -21,7 +21,7 @@ func clear_rule_v4() {
 	}
 }
 
-func clear_rule_v6() {
+func clean_rule_v6() {
 
 }
 
