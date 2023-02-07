@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func clear_rule_v4() {
+func clean_rule_v4() {
 
 	exec.Command("bash", "-c", `iptables-restore --noflush <<-EOF
 		*nat
@@ -17,7 +17,7 @@ func clear_rule_v4() {
 		EOF`)
 }
 
-func clear_rule_v6() {
+func clean_rule_v6() {
 
 	exec.Command("bash", "-c", `ip6tables-restore --noflush <<-EOF
 		*nat
