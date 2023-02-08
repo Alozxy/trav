@@ -14,7 +14,7 @@ func clean_rule_v4() {
 		-F TRAVERSAL
 		-X TRAVERSAL
 		COMMIT
-		EOF`)
+		EOF`).Run()
 }
 
 func clean_rule_v6() {
@@ -25,7 +25,7 @@ func clean_rule_v6() {
 		-F TRAVERSAL
 		-X TRAVERSAL
 		COMMIT
-		EOF`)
+		EOF`).Run()
 }
 
 func set_rule_v4() {
