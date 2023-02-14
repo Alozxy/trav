@@ -14,7 +14,7 @@ go build -o trav
 
 ## Usage
 
-Currently only supports Linux system, and need iptables to create redirect rules.
+Currently only supports Linux and Windows, and need iptables to create redirect rules.
 
 ```
 trav -i 1500 -l 12345 -r 14885 -s stun.mixvoip.com:3478 -o /tmp/external.port
