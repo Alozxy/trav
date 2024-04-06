@@ -38,7 +38,7 @@ func main() {
 	}
 	var local_port uint16 = uint16(local_port_64)
 	var redir_port uint16 = uint16(redir_port_64)
-	server_ip_list, err := net.LookupIP(strings.Split(stun_server, ":")[0])
+	server_ip_list, err := net.DefaultResolver.LookupIP(context.Background(), "ip4", strings.Split(stun_server, ":")[0])
 	if err != nil {
 		log.Fatalln("can't resolve stun server's hostname", err)
 	}
