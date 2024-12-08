@@ -10,7 +10,12 @@ func start() {
 		go udp_loop()
 		for {
 
-			request(&external_port)
+			if conf.get_conf("ifconfig_me").(bool) {
+				ifconfig_me_request(&external_port)
+			} else {
+				stun_request(&external_port)
+			}
+
 			time.Sleep(time.Duration(get_conf("interval").(int)) * time.Second)
 		}
 
@@ -19,7 +24,11 @@ func start() {
 		for {
 
 			send_syn()
-			request(&external_port)
+			if conf.get_conf("ifconfig_me").(bool) {
+				ifconfig_me_request(&external_port)
+			} else {
+				stun_request(&external_port)
+			}
 
 			for i := 0; i < get_conf("interval").(int); i++ {
 

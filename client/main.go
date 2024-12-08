@@ -1,10 +1,10 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"net"
-	"context"
 	"os"
 	"os/signal"
 	"strconv"
@@ -23,6 +23,7 @@ func main() {
 	var udp_mode bool
 	var print_version bool
 	var output string
+	var ifconfig_me bool
 	flag.StringVar(&stun_server, "s", "stun.mixvoip.com:3478", "stun server address in [addr:port] format, must support stun over tcp.")
 	flag.Uint64Var(&local_port_64, "l", 12345, "local port")
 	flag.Uint64Var(&redir_port_64, "r", 14885, "redir port")
@@ -32,6 +33,7 @@ func main() {
 	flag.BoolVar(&udp_mode, "u", false, "enable udp mode")
 	flag.BoolVar(&print_version, "v", false, "show current version")
 	flag.StringVar(&output, "o", "./external.port", "Write output to <file-path>")
+	flag.BoolVar(&ifconfig_me, "m", false, "Use ifconfig.me to fetch ip and port(tcp only)")
 	flag.Parse()
 	if print_version {
 		println("trav", version)

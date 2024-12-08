@@ -10,7 +10,7 @@ import (
 	"github.com/pion/stun"
 )
 
-func request(external_port *uint16) {
+func stun_request(external_port *uint16) {
 
 	local_port := get_conf("local_port").(uint16)
 	server_ip := get_conf("server_ip").(string)
