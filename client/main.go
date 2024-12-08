@@ -62,6 +62,7 @@ func main() {
 	set_conf("output", output)
 	set_conf("server_ip", server_ip)
 	set_conf("server_port", server_port)
+	set_conf("ifconfig_me", ifconfig_me)
 
 	c := make(chan os.Signal)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
