@@ -32,6 +32,7 @@ func ifconfig_me_request(external_port *uint16) {
 		Transport: &http.Transport{
 			DialContext:       ipv4DialContext,
 			ForceAttemptHTTP2: false,
+			DisableKeepAlives: true,
 		},
 	}
 
