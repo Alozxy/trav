@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"log"
@@ -21,10 +22,14 @@ func ifconfig_me_request(external_port *uint16) {
 		LocalAddr: lAddr,
 	}
 
+	ipv4DialContext := func(ctx context.Context, network, addr string) (net.Conn, error) {
+		return d.DialContext(ctx, "tcp4", addr)
+	}
+
 	log.Println("connecting to ifconfig.me")
 	client := &http.Client{
 		Transport: &http.Transport{
-			DialContext: d.DialContext,
+			DialContext: ipv4DialContext,
 		},
 	}
 
