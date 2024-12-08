@@ -28,12 +28,13 @@ func ifconfig_me_request(external_port *uint16) {
 	}
 
 	log.Println("connecting to ifconfig.me")
+	transport := &http.Transport{
+		DialContext:       ipv4DialContext,
+		ForceAttemptHTTP2: false,
+		DisableKeepAlives: true,
+	}
 	client := &http.Client{
-		Transport: &http.Transport{
-			DialContext:       ipv4DialContext,
-			ForceAttemptHTTP2: false,
-			DisableKeepAlives: true,
-		},
+		Transport: transport,
 	}
 
 	resp, err := client.Get("https://ifconfig.me/all.json")
@@ -43,6 +44,7 @@ func ifconfig_me_request(external_port *uint16) {
 	}
 
 	defer resp.Body.Close()
+	defer transport.CloseIdleConnections()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
