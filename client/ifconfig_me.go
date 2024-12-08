@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -29,7 +30,8 @@ func ifconfig_me_request(external_port *uint16) {
 	log.Println("connecting to ifconfig.me")
 	client := &http.Client{
 		Transport: &http.Transport{
-			DialContext: ipv4DialContext,
+			DialContext:       ipv4DialContext,
+			ForceAttemptHTTP2: false,
 		},
 	}
 
@@ -63,10 +65,15 @@ func ifconfig_me_request(external_port *uint16) {
 
 	if value, ok := data["port"]; ok {
 		log.Printf("Port: %v\n", value)
+		port, err := strconv.ParseUint(value.(string), 10, 16)
+		if err != nil {
+			log.Println("Error converting port to uint16:", err)
+			return
+		}
+		*external_port = uint16(port)
 	} else {
 		log.Println("Key 'port' not found")
 		return
 	}
 
-	*external_port = uint16(data["port"].(float64))
 }
