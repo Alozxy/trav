@@ -1,10 +1,10 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"net"
-	"context"
 	"os"
 	"os/signal"
 	"strconv"
@@ -23,6 +23,7 @@ func main() {
 	var udp_mode bool
 	var print_version bool
 	var output string
+	var chain_name string
 	flag.StringVar(&stun_server, "s", "stun.mixvoip.com:3478", "stun server address in [addr:port] format, must support stun over tcp.")
 	flag.Uint64Var(&local_port_64, "l", 12345, "local port")
 	flag.Uint64Var(&redir_port_64, "r", 14885, "redir port")
@@ -32,6 +33,7 @@ func main() {
 	flag.BoolVar(&udp_mode, "u", false, "enable udp mode")
 	flag.BoolVar(&print_version, "v", false, "show current version")
 	flag.StringVar(&output, "o", "./external.port", "Write output to <file-path>")
+	flag.StringVar(&chain_name, "n", "TRAV", "iptables chain name, only works on linux")
 	flag.Parse()
 	if print_version {
 		println("trav", version)
@@ -60,6 +62,7 @@ func main() {
 	set_conf("output", output)
 	set_conf("server_ip", server_ip)
 	set_conf("server_port", server_port)
+	set_conf("chain_name", chain_name)
 
 	c := make(chan os.Signal)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
